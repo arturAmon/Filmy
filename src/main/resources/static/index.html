@@ -38,24 +38,24 @@
                         <div class="col-md-6">
                             <fieldset class="estrellitas">
                                 <label title="Atómico - 5 estrellas">
-                                        <input type="radio" name="rating" value="5" />
-                                    </label>
+                                    <input type="radio" name="rating" value="5" />
+                                </label>
 
                                 <label title="Muy buena - 4 estrellas">
-                                        <input type="radio" name="rating" value="4" />
-                                    </label>
+                                    <input type="radio" name="rating" value="4" />
+                                </label>
 
                                 <label title="Pasable - 3 estrellas">
-                                        <input type="radio" name="rating" value="3" />
-                                    </label>
+                                    <input type="radio" name="rating" value="3" />
+                                </label>
 
                                 <label title="Más bien mala - 2 estrellas">
-                                        <input type="radio" name="rating" value="2" />
-                                    </label>
+                                    <input type="radio" name="rating" value="2" />
+                                </label>
 
                                 <label title="Horrible - 1 estrella">
-                                        <input type="radio" name="rating" value="1" />
-                                    </label>
+                                    <input type="radio" name="rating" value="1" />
+                                </label>
                             </fieldset>
                         </div>
                         <button style="display: none" type="submit">Invisible, sólo para validación</button>
@@ -85,7 +85,8 @@
                             <input type="text" class="form-control" name="name" placeholder="Título" required>
                         </div>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="imdb" placeholder="ID en IMDB (ej.: tt1234567)" required pattern="tt[0-9]+">
+                            <input type="text" class="form-control" name="imdb"
+                                placeholder="ID en IMDB (ej.: tt1234567)" required pattern="tt[0-9]+">
                         </div>
 
                         <div class="col-md-4">
@@ -96,10 +97,12 @@
                         </div>
 
                         <div class="col-md-4">
-                            <input type="number" class="form-control" name="year" placeholder="Año de estreno" min="1800" max="2022" required>
+                            <input type="number" class="form-control" name="year" placeholder="Año de estreno"
+                                min="1800" max="2022" required>
                         </div>
                         <div class="col-md-8">
-                            <input type="number" class="form-control" name="minutes" placeholder="Duración en minutos" min="0" max="600" required>
+                            <input type="number" class="form-control" name="minutes" placeholder="Duración en minutos"
+                                min="0" max="600" required>
                         </div>
                         <button style="display: none" type="submit">Invisible, sólo para validación</button>
                     </form>
@@ -125,13 +128,7 @@
                 <div class="navbar-nav me-auto mb-2 mb-lg-0">
                     <a class="nav-link nav_input" href="#" data-id="groups">Groups</a>
                     <a class="nav-link nav_input" href="#" data-id="users">Users</a>
-                    <a class="nav-link nav_input" href="#" data-id="help">Help</a>
                 </div>
-                <form class="d-flex">
-                    <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button> -->
-                    <span class="badge bg-primary"><a class="nav-link nav_input" href="#" data-id="search">Search 🔎</a></span>
-                </form>
                 <div class="navbar-nav mb-2 mb-lg-0">
                     <a id="profile_nav" class="nav-link nav_input" href="#" data-id="profile">Profile</a>
                 </div>
@@ -142,13 +139,57 @@
 
     <!-- pseudoview of home -->
     <div id="home_view" class=" filmy_view mx-6 container-fluid">
-        <div class="row md-5 gx-1 mx-3 my-3">
-            <div class="col-5">
-                <input type="search" class="form-control" id="movieSearch" placeholder="Busca una pelicula!"
-                    aria-describedby="searchMovieLabel">
-            </div>
-            <div class="col-1">
-                <input type="button" id="buttonSearch" class="btn btn-light" value="🔍">
+        <div class="search-container ">
+            <div class="searcheador bg-dark">
+                <div class="row">
+                    <div class="col-12">
+                        <input type="text" id="search-input" placeholder="Search film...">
+                        <button type="button" class="btn btn-primary" id="searchbut">🔎</button>
+                        <button type="button" class="btn btn-primary" id="advsearch">Advanced Search</button>
+                    </div>
+                </div>
+                <div id="advanced-search-container" class="d-none">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <label for="search_director" class="col-sm-2 col-form-label">Director</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="search_director">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <label for="search_director" class="col-sm-2 col-form-label">Sort by</label>
+                                <div class="col-sm-10 d-flex">
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option value="rating_asc">Rating (descending)</option>
+                                        <option value="rating_desc" selected>Rating (descending)</option>
+                                        <option value="dur_asc">Duration (ascending)</option>
+                                        <option value="dur_desc">Duration (descending)</option>
+                                        <option value="date_asc">Date of release (ascending)</option>
+                                        <option value="date_asc">Date of release (descending)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <label for="search_tag" class="col-sm-2 col-form-label">Tag</label>
+                                <div class="col-sm-10">
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected>Open this select menu</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
             </div>
         </div>
         <div id="home_row" class="row">
@@ -204,80 +245,7 @@
 
     <!-- pseudoview of search -->
     <div id="search_view" class="filmy_view">
-        <div class="search-container ">
-            <div class="searcheador bg-dark">
-                <div class="row">
-                    <div class="col-12">
-                        <input type="text" id="search-input" placeholder="Search film...">
-                        <button type="button" class="btn btn-primary" id="searchbut">🔎</button>
-                        <button type="button" class="btn btn-primary" id="advsearch">Advanced Search</button>
-                    </div>
-                </div>
-                <div class="advanced-search-container">
 
-                    <div class="row">
-                        <div class="col">
-                            <div class="row">
-                                <label for="range-1a">Rangeslider:</label>
-                                <input id="ex2" type="range" class="col-sm-2" value="" data-min="10" data-max="1000" data-step="5" data-value="[250,450]"/>    
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="row">
-                                <label for="search_group" class="col-6">Name</label>
-                                <input type="text" class="col-6">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="row">
-                                <label for="search_group" class="col-6">Director</label>
-                                <input type="text" class="col-6">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="row">
-                                <label for="search_group" class="col-6">Group</label>
-                                <input type="text" class="col-6">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="row">
-                                <label for="search_group" class="col-6">Group</label>
-                                <input type="text" class="col-6">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="row">
-                                <label for="search_group" class="col-6">Group</label>
-                                <input type="text" class="col-6">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="row">
-                                <label for="search_group" class="col-6">Group</label>
-                                <input type="text" class="col-6">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="row">
-                                <label for="search_group" class="col-6">Group</label>
-                                <input type="text" class="col-6">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="row">
-                                <label for="search_group" class="col-6">Group</label>
-                                <input type="text" class="col-6">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div id="search-results">
             <!--Resultado de las búsquedas-->
         </div>
@@ -292,21 +260,21 @@
 
     <div class="modal fade" id="rmusermdl" tabindex="-1" aria-labelledby="rmusermdllabel" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="rmusermdllabel">CAUTION</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rmusermdllabel">CAUTION</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Do you want to remove this user?
+                    <br>
+                    This action cannot be fixed.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="rmvuserb" class="btn btn-primary">Remove User</button>
+                </div>
             </div>
-            <div class="modal-body">
-              Do you want to remove this user? 
-              <br>
-              This action cannot be fixed.
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" id="rmvuserb" class="btn btn-primary">Remove User</button>
-            </div>
-          </div>
         </div>
     </div>
 

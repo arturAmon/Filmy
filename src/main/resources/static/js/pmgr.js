@@ -70,7 +70,7 @@ const createMovieItem = (movie) => {
     ).join("");
 
     return `
-    <div class="col-sm-3 d-flex align-items-stretch">
+    <div class="col-3">
     <div class="card mx-3 my-3" data-id="${movie.id}">
     <div class="card-header"">
         <h5 class="mb-0" title="${movie.id}">
@@ -329,9 +329,8 @@ const update_profile = (actualUser) => {
 
     let currentUser = Pmgr.state.users.find(e => e.id == userId);
 
-    console.log(currentUser.role);
 
-    if (currentUser.role.split(',').includes("ADMIN") ||  currentUser.role.split(',').includes("ROOT")) {
+    if (currentUser.role.split(',').includes("ADMIN") || currentUser.role.split(',').includes("ROOT")) {
         html +=
             `<div id="profile_button_bar" class="d-flex flex-row-reverse sticky-bottom pt-3 pb-5" data-id="${actualUser.id}">
                 <button type="button" class="change_user_btn btn btn-outline-success m-1">Change user</button>
@@ -344,7 +343,7 @@ const update_profile = (actualUser) => {
                 <button type="button" class="change_password_btn change_pwd_btn btn btn-outline-success m-1">Change password</button>
                 <button type="button" class="rm_user_btn btn btn-outline-danger m-1">Delete account</button>
              </div>`;
-    } else{
+    } else {
 
     }
 
@@ -360,21 +359,24 @@ const update = () => {
         let state = Pmgr.state;
 
         const lists =
-            ['home_row',
+            [   'home_row',
                 'group_row',
                 'user_list'
             ];
 
         const views =
-            ['group_view',
-                'help_view',
+            [   'group_view',
                 'user_view',
-                'search_view',
                 'profile_view',
                 'home_view'
             ];
 
         lists.forEach(e => empty('#' + e));
+
+        
+        state.movies.forEach(movie => appendTo('#home_row', createMovieItem(movie)));
+        state.groups.forEach(group => appendTo('#group_row', createGroupItem(group)));
+        state.users.forEach(user => appendTo('#user_list', createUserItem(user)));
 
         document.querySelectorAll(".nav_input").forEach(button => {
             button.addEventListener('click', e => {
@@ -383,15 +385,11 @@ const update = () => {
                 switch (e.target.dataset.id) {
                     case "groups":
                         document.querySelector("#group_view").classList.remove("d-none");
-                        break;
-                    case "help":
-                        document.querySelector("#help_view").classList.remove("d-none");
+                        update();
                         break;
                     case "users":
                         document.querySelector("#user_view").classList.remove("d-none");
-                        break;
-                    case "search":
-                        document.querySelector("#search_view").classList.remove("d-none");
+                        update();
                         break;
                     case "profile":
                         document.querySelector("#profile_view").classList.remove("d-none");
@@ -400,14 +398,8 @@ const update = () => {
                         update();
                         break;
                     case "home":
-                        document.querySelector("#home_view").classList.remove("d-none");
-                        empty('#home_view');
-                        update_profile(currentUser);
-                        update();
-                        break;
                     default:
                         document.querySelector("#home_view").classList.remove("d-none");
-                        empty('#home_view');
                         update_profile(currentUser);
                         update();
                         break;
@@ -415,9 +407,6 @@ const update = () => {
             });
         });
 
-        state.movies.forEach(movie => appendTo('#home_row', createMovieItem(movie)));
-        state.groups.forEach(group => appendTo('#group_row', createGroupItem(group)));
-        state.users.forEach(user => appendTo('#user_list', createUserItem(user)));
 
         //BOTONES GRUPOS
         document.querySelectorAll(".iucontrol.group button.rm").forEach(b =>
@@ -440,7 +429,7 @@ const update = () => {
             e.addEventListener('click', e => {
                 let uid = e.target.parentElement.dataset.id;
                 let user = state.users.find(u => u.id == uid);
-                if(!user.role.split(',').includes('ADMIN') && !user.role.split(',').includes('ROOT') ){
+                if (!user.role.split(',').includes('ADMIN') && !user.role.split(',').includes('ROOT')) {
                     let new_user = new Pmgr.User(
                         user.id,
                         user.username,
@@ -452,14 +441,15 @@ const update = () => {
                     );
                     Pmgr.setUser(new_user).then(
                         () => {
-                            login(user.username, '12345');
+                            login(new_user.username, '12345');
+                        }
+                    ).then(
+                        () => {
+                            empty('#profile_view');
+                            update_profile(new_user);
                         }
                     );
                 }
-                else if(user.username === 'g2'){
-                    login('g2', 'eSMDK');
-                }
-               
             })
         });
 
@@ -477,7 +467,7 @@ const update = () => {
                         $('#rmusermdl').modal('hide');
                     })
                 });
-                
+
             })
         });
 
@@ -549,6 +539,23 @@ const update = () => {
                 formulario.querySelector("input[name=movie]").value = id;
                 formulario.querySelector("input[name=user]").value = userId;
                 modalRateMovie.show(); // ya podemos mostrar el formulario
+
+            })
+        );
+
+        document.querySelector("#search-input").addEventListener("input", e => {
+            const v = e.target.value.toLowerCase();
+            document.querySelectorAll("#home_row div.card").forEach(c => {
+                const m = Pmgr.resolve(c.dataset.id);
+                // aquí podrías aplicar muchos más criterios
+                const ok = m.name.toLowerCase().indexOf(v) >= 0;
+                c.parentElement.style.display = ok ? '' : 'none';
+            });
+        })
+
+        document.querySelector("#advsearch").addEventListener('click', e => {
+            document.querySelector('#advanced-search-container').classList.toggle('d-none');
+        });
             }));
           
 
@@ -617,11 +624,6 @@ const update = () => {
     }
 }
 
-
-
-
-
-
 const username = 'g2';
 const password = 'eSMDK';
 const url = serverUrl + 'api/';
@@ -632,6 +634,60 @@ login(username, password);
 const modalEditMovie = new bootstrap.Modal(document.querySelector('#movieEdit'));
 const modalRateMovie = new bootstrap.Modal(document.querySelector('#movieRate'));
 
+{
+    /** 
+     * Asocia comportamientos al formulario de añadir películas 
+     * en un bloque separado para que las constantes y variables no salgan de aquí, 
+     * manteniendo limpio el espacio de nombres del fichero
+     */
+    // const f = document.querySelector("#addMovie form");
+    // // botón de enviar
+    // f.querySelector("button[type='submit']").addEventListener('click', (e) => {
+    //     if (f.checkValidity()) {
+    //         e.preventDefault(); // evita que se haga lo normal cuando no hay errores
+    //         nuevaPelicula(f); // añade la pelicula según los campos previamente validados
+    //     }
+    // });
+    // botón de generar datos (sólo para pruebas)
+    // f.querySelector("button.generar").addEventListener('click',
+    //     (e) => generaPelicula(f)); // aquí no hace falta hacer nada raro con el evento
+} {
+    /**
+     * formulario para modificar películas
+     */
+    const f = document.querySelector("#movieEditForm");
+    // botón de enviar
+    document.querySelector("#movieEdit button.edit").addEventListener('click', e => {
+        console.log("enviando formulario!");
+        if (f.checkValidity()) {
+            modificaPelicula(f); // modifica la pelicula según los campos previamente validados
+        } else {
+            e.preventDefault();
+            f.querySelector("button[type=submit]").click(); // fuerza validacion local
+        }
+    });
+} {
+    /**
+     * formulario para evaluar películas; usa el mismo modal para añadir y para editar
+     */
+    const f = document.querySelector("#movieRateForm");
+    // botón de enviar
+    document.querySelector("#movieRate button.edit").addEventListener('click', e => {
+        console.log("enviando formulario!");
+        if (f.checkValidity()) {
+            if (f.querySelector("input[name=id]").value == -1) {
+                nuevoRating(f);
+            } else {
+                modificaRating(f); // modifica la evaluación según los campos previamente validados
+            }
+        } else {
+            e.preventDefault();
+            f.querySelector("button[type=submit]").click(); // fuerza validacion local
+        }
+    });
+    // activa rating con estrellitas
+    //stars("#movieRateForm .estrellitas");
+}
 
 
 window.modalEditMovie = modalEditMovie;
@@ -641,27 +697,19 @@ window.login = login;
 window.user_id = () => userId;
 window.Pmgr = Pmgr;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * TODO:
- * AÑADIR PELICULAS?
- * EVALUAR PELICULAS OKAY MAS O MENOS
- * 
+ * TODO
+ * {AÑADIR PELICULAS}
  * BORRAR Y EDITAR PELICULAS SOLO SI ERES ADMIN
+ * {BUSQUEDAS AVANZADAS}
+ * {BUSQUEDA USUARIOS}
+ * (REFRESCAR PANTALLA AL CAMBIAR USUARIO)
+ * MODAL CREAR USUARIO
+ * CHANGE USER -- MODIFICAR USUARIO
+ * 
+ * 
+ * CREAR GRUPOS
+ * REMATAR GRUPOS
+ * VER LOS GRUPOS EN LOS QUE ESTÁS METIDO COMO USUARIO
  */
 
-
-
-
-/**
- * búsqueda básica de películas, por título
- */
-document.querySelector("#movieSearch").addEventListener("input", e => {
-    const v = e.target.value.toLowerCase();
-    document.querySelectorAll("#movies div.card").forEach(c => {
-        const m = Pmgr.resolve(c.dataset.id);
-        // aquí podrías aplicar muchos más criterios
-        const ok = m.name.toLowerCase().indexOf(v) >= 0;
-        c.style.display = ok ? '' : 'none';
-    });
-})
