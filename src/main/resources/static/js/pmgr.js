@@ -359,13 +359,13 @@ const update = () => {
         let state = Pmgr.state;
 
         const lists =
-            [   'home_row',
+            ['home_row',
                 'group_row',
                 'user_list'
             ];
 
         const views =
-            [   'group_view',
+            ['group_view',
                 'user_view',
                 'profile_view',
                 'home_view'
@@ -373,7 +373,7 @@ const update = () => {
 
         lists.forEach(e => empty('#' + e));
 
-        
+
         state.movies.forEach(movie => appendTo('#home_row', createMovieItem(movie)));
         state.groups.forEach(group => appendTo('#group_row', createGroupItem(group)));
         state.users.forEach(user => appendTo('#user_list', createUserItem(user)));
@@ -556,68 +556,67 @@ const update = () => {
         document.querySelector("#advsearch").addEventListener('click', e => {
             document.querySelector('#advanced-search-container').classList.toggle('d-none');
         });
-            }));
-          
 
-            //Codigo de pegamento
-            {
-                /**
-                 * formulario para modificar películas
-                 */
-                const f = document.querySelector("#movieEditForm");
-                // botón de enviar
-                document.querySelector("#movieEdit button.edit").addEventListener('click', e => {
-                    console.log("enviando formulario!");
-                    if (f.checkValidity()) {
-                        modificaPelicula(f); // modifica la pelicula según los campos previamente validados
+
+        //Codigo de pegamento
+        {
+            /**
+             * formulario para modificar películas
+             */
+            const f = document.querySelector("#movieEditForm");
+            // botón de enviar
+            document.querySelector("#movieEdit button.edit").addEventListener('click', e => {
+                console.log("enviando formulario!");
+                if (f.checkValidity()) {
+                    modificaPelicula(f); // modifica la pelicula según los campos previamente validados
+                } else {
+                    e.preventDefault();
+                    f.querySelector("button[type=submit]").click(); // fuerza validacion local
+                }
+            });
+        }
+
+        {
+            /**
+             * formulario para evaluar películas; usa el mismo modal para añadir y para editar
+             */
+            const f = document.querySelector("#movieRateForm");
+            // botón de enviar
+            document.querySelector("#movieRate button.edit").addEventListener('click', e => {
+                console.log("enviando formulario!");
+                if (f.checkValidity()) {
+                    if (f.querySelector("input[name=id]").value == -1) {
+                        nuevoRating(f);
                     } else {
-                        e.preventDefault();
-                        f.querySelector("button[type=submit]").click(); // fuerza validacion local
+                        modificaRating(f); // modifica la evaluación según los campos previamente validados
                     }
-                });
-            }
+                } else {
+                    e.preventDefault();
+                    f.querySelector("button[type=submit]").click(); // fuerza validacion local
+                }
+            });
+            // activa rating con estrellitas
+            stars("#movieRateForm .estrellitas");
+        }
 
-            {
-                /**
-                 * formulario para evaluar películas; usa el mismo modal para añadir y para editar
-                 */
-                const f = document.querySelector("#movieRateForm");
-                // botón de enviar
-                document.querySelector("#movieRate button.edit").addEventListener('click', e => {
-                    console.log("enviando formulario!");
-                    if (f.checkValidity()) {
-                        if (f.querySelector("input[name=id]").value == -1) {
-                            nuevoRating(f);
-                        } else {
-                            modificaRating(f); // modifica la evaluación según los campos previamente validados
-                        }
-                    } else {
-                        e.preventDefault();
-                        f.querySelector("button[type=submit]").click(); // fuerza validacion local
-                    }
-                });
-                // activa rating con estrellitas
-                stars("#movieRateForm .estrellitas");
-            }
-
-            {
-                /** 
-                 * Asocia comportamientos al formulario de añadir películas 
-                 * en un bloque separado para que las constantes y variables no salgan de aquí, 
-                 * manteniendo limpio el espacio de nombres del fichero
-                 */
-                const f = document.querySelector("#addMovie form");
-                // botón de enviar
-                f.querySelector("button[type='submit']").addEventListener('click', (e) => {
-                    if (f.checkValidity()) {
-                        e.preventDefault(); // evita que se haga lo normal cuando no hay errores
-                        nuevaPelicula(f); // añade la pelicula según los campos previamente validados
-                    }
-                });
-                // botón de generar datos (sólo para pruebas)
-                f.querySelector("button.generar").addEventListener('click',
-                    (e) => generaPelicula(f)); // aquí no hace falta hacer nada raro con el evento
-            }
+        {
+            /** 
+             * Asocia comportamientos al formulario de añadir películas 
+             * en un bloque separado para que las constantes y variables no salgan de aquí, 
+             * manteniendo limpio el espacio de nombres del fichero
+             */
+            const f = document.querySelector("#addMovie form");
+            // botón de enviar
+            f.querySelector("button[type='submit']").addEventListener('click', (e) => {
+                if (f.checkValidity()) {
+                    e.preventDefault(); // evita que se haga lo normal cuando no hay errores
+                    nuevaPelicula(f); // añade la pelicula según los campos previamente validados
+                }
+            });
+            // botón de generar datos (sólo para pruebas)
+            f.querySelector("button.generar").addEventListener('click',
+                (e) => generaPelicula(f)); // aquí no hace falta hacer nada raro con el evento
+        }
 
     } catch (e) {
         console.error("Error updating: ", e);
@@ -706,7 +705,7 @@ window.Pmgr = Pmgr;
  * (REFRESCAR PANTALLA AL CAMBIAR USUARIO)
  * MODAL CREAR USUARIO
  * CHANGE USER -- MODIFICAR USUARIO
- * 
+ * GUARDAR CAMBIOS
  * 
  * CREAR GRUPOS
  * REMATAR GRUPOS
