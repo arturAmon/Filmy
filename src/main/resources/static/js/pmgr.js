@@ -703,12 +703,40 @@ window.Pmgr = Pmgr;
  * {BUSQUEDAS AVANZADAS}
  * {BUSQUEDA USUARIOS}
  * (REFRESCAR PANTALLA AL CAMBIAR USUARIO)
- * MODAL CREAR USUARIO
+ * CREAR USUARIO
  * CHANGE USER -- MODIFICAR USUARIO
- * GUARDAR CAMBIOS
  * 
  * CREAR GRUPOS
  * REMATAR GRUPOS
  * VER LOS GRUPOS EN LOS QUE ESTÁS METIDO COMO USUARIO
+ * 
+ * GESTION DE ROLES
+ * VER TUS GRUPOS EN TU PERFIL
  */
+
+/**
+ * Done
+ * 
+ * GENERAL
+ * favicon creado
+ * favicon puesto
+ * tema oscuro puesto (moderno)
+ * simplificar barra de navegacion
+ * 
+ * HOME
+ * Vista home mejorada
+ * Borrar peli
+ * modificar peli
+ * valorar peli
+ * buscar peli
+ * 
+ * GRUPOS
+ * Grupos simplificado
+ * 
+ * USUARIOS Y PERFIL
+ * Se puede poseer un usuario
+ * Usuario y perfil con control de usuario
+ * vista de perfil mejorado
+ */
+
 
