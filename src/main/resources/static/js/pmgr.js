@@ -553,7 +553,7 @@ const update = () => {
             });
         })
 
-        document.querySelector("#advsearch").addEventListener('click', e => {
+        document.querySelector("#advsearch").addEventListener('click', () => {
             document.querySelector('#advanced-search-container').classList.toggle('d-none');
         });
 
